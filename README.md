@@ -85,7 +85,7 @@ Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://git
 
 ## 1. Overview
 
-scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: recorded in CSV. Sweep dimensions: num_numa_nodes, num_threads, thread_affinity, page_size, working_set_size, stride, access_pattern, prefetch_enabled.
+scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: recorded in CSV. Sweep dimensions: num_numa_nodes, working_set_size, stride, warmup_iters, num_iterations, num_threads, thread_affinity.
 
 ## 2. What It Validates
 
