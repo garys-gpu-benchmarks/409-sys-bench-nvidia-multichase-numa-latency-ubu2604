@@ -60,7 +60,7 @@ To move to the newest published release later: `cd /opt/benchmarks && git pull &
 
 ## Suite Tools
 
-Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://github.com/garys-gpu-benchmarks/gpu-bench-suite) work across the whole bundle. `run_benchmark_suite.sh` and `show_metrics.sh` are also at the top of every bundle (and the generator's remote copy installs `show_metrics.sh` at `/opt/benchmarks`); each script prints full usage with `--help`.
+Four operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://github.com/garys-gpu-benchmarks/gpu-bench-suite) work across the whole bundle. All four are also at the top of every bundle, and `show_metrics.sh` is at the top of this repository too; each script prints full usage with `--help`.
 
 - **`run_benchmark_suite.sh`** (on the GPU host) — runs the installed workloads one after another for each profile, writes one log to `/opt/benchmarks/benchmark_suite_log/`, and ends with a pass/fail summary.
   ```bash
@@ -70,22 +70,29 @@ Three operator scripts from [`garys-gpu-benchmarks/gpu-bench-suite`](https://git
   ./run_benchmark_suite.sh --smoke                      # every workload, smoke profile
   ./run_benchmark_suite.sh -r 20                        # soak: everything, 20 times
   ```
-- **`get_remote_info.sh`** (on your laptop; Git Bash on Windows) — over one SSH connection, copies the runtime ledger and every workload's `results/raw`, `results/parsed` and suite logs into `RUNTIME_LEDGERS/` and `DIRECTORIES/`.
+- **`get_benchmark_results.sh`** (on your laptop with `--host`, or on the GPU host without it) — copies the runtime ledger and every workload's `results/raw`, `results/parsed` and suite logs into `RUNTIME_LEDGERS/` and `DIRECTORIES/`. With `--host` it collects over one SSH connection; without `--host` it collects from the machine it runs on.
   ```bash
   git clone https://github.com/garys-gpu-benchmarks/gpu-bench-suite && cd gpu-bench-suite
-  ./scripts/get_remote_info.sh --host 203.0.113.10              # root@host, port 22
-  ./scripts/get_remote_info.sh --host ubuntu@203.0.113.10 --port 2222 -i ~/.ssh/id_ed25519 -o ~/results
+  ./scripts/get_benchmark_results.sh --host 203.0.113.10        # root@host, port 22
+  ./scripts/get_benchmark_results.sh --host ubuntu@203.0.113.10 --port 2222 -i ~/.ssh/id_ed25519 -o ~/results
+  /opt/benchmarks/get_benchmark_results.sh -o ~/results     # on the GPU host: this machine
   ```
-- **`show_metrics.sh`** (laptop or GPU host) — prints one workload's runs from the runtime ledger in fixed-width metric columns with per-profile means. On the GPU host it is `/opt/benchmarks/show_metrics.sh`.
+- **`show_ledger_runs.sh`** (on your laptop with `--host`, or on the GPU host without it) — prints one line per run in the runtime ledger (workload, profile, runtime, exit code) and copies nothing. `--failed` lists only runs that did not exit 0.
   ```bash
-  cd /opt/benchmarks && ./show_metrics.sh 409             # on the GPU host
+  ./scripts/show_ledger_runs.sh --host 203.0.113.10           # from your laptop
+  /opt/benchmarks/show_ledger_runs.sh --failed            # on the GPU host
+  ```
+- **`show_metrics.sh`** (laptop or GPU host; included in this repository) — prints one workload's runs from the runtime ledger in fixed-width metric columns with per-profile means.
+  ```bash
+  ./show_metrics.sh 409                                        # from this repository, on the GPU host
+  cd /opt/benchmarks && ./show_metrics.sh 409             # or from the bundle
   ./scripts/show_metrics.sh 409 --host 203.0.113.10            # over SSH, all profiles
   ./scripts/show_metrics.sh 409 --baseline --file RUNTIME_LEDGERS/<ledger>.csv
   ```
 
 ## 1. Overview
 
-scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: recorded in CSV. Sweep dimensions: num_numa_nodes, working_set_size, stride, warmup_iters, num_iterations, num_threads, thread_affinity.
+scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: concurrent chase threads. Sweep dimensions: num_numa_nodes, working_set_size, stride, warmup_iters, num_iterations, num_threads, thread_affinity.
 
 ## 2. What It Validates
 
