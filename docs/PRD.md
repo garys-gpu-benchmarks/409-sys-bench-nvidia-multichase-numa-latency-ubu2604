@@ -21,7 +21,7 @@ scripts/collect_workload.py dispatches collect_multichase.py, which compiles src
 Measure pointer-chase latency across yaml working-set tiers
 
 ## Validation Objective
-Validates at least two finite latency_ns rows from collect_multichase.py. remote_dram uses numactl --membind=1 when numactl reports two or more NUMA nodes; on a single-node host it is reported as not measured
+Validates at least two finite latency_ns rows. remote_dram is not measured on a single-node host
 
 ## Workload Category
 Memory, Bandwidth & Data Movement

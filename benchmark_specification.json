@@ -140,6 +140,16 @@
     "value": "-"
   },
   {
+    "field_name": "Validation Objective",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Validates at least two finite latency_ns rows. remote_dram is not measured on a single-node host"
+  },
+  {
+    "field_name": "Command Tools Executed",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "Compile src/multichase.c; run build/multichase under numactl via scripts/collect_multichase.py"
+  },
+  {
     "field_name": "run_benchmark Command Plus Options for Smoke Run (One minute or less)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --smoke --validate --num-numa-nodes 1 --working-set-size l1=16384,l2=262144,l3=2097152,local_dram=268435456,remote_dram=268435456 --stride 64 --warmup-iters 10000 --num-iterations 200000 --num-threads 1 --thread-affinity 0-3"
@@ -153,16 +163,6 @@
     "field_name": "run_benchmark Command Plus Options for Extended Run (8 to 15 minutes)",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "bash run_benchmark.sh --extended --validate --num-numa-nodes 1 --working-set-size l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456 --stride 64 --warmup-iters 1000000 --num-iterations 2760000000 --num-threads 4 --thread-affinity 0-3"
-  },
-  {
-    "field_name": "Validation Objective",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Validates at least two finite latency_ns rows from collect_multichase.py. remote_dram uses numactl --membind=1 when numactl reports two or more NUMA nodes; on a single-node host it is reported as not measured"
-  },
-  {
-    "field_name": "Command Tools Executed",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Compile multichase.c with gcc -O2 -std=c11 via collect_multichase.py; always prefix numactl --cpunodebind=0 and --membind=0 or 1"
   },
   {
     "field_name": "Command Execution Details and Purpose",
@@ -377,7 +377,7 @@
   {
     "field_name": "Workload Command Line Executable",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "Compile multichase.c with gcc -O2 -std=c11 via collect_multichase.py; always prefix numactl --cpunodebind=0 and --membind=0 or 1"
+    "value": "Compile src/multichase.c; run build/multichase under numactl via scripts/collect_multichase.py"
   },
   {
     "field_name": "ROCm Version",
@@ -412,7 +412,7 @@
   {
     "field_name": "Profile Parameter Values",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Parameters_SmokeBaselineExtend",
-    "value": "{\"num_numa_nodes\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\", \"notes\": \"\"}, \"working_set_size\": {\"smoke\": \"l1=16384,l2=262144,l3=2097152,local_dram=268435456,remote_dram=268435456\", \"baseline\": \"l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456\", \"extended\": \"l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456\", \"notes\": \"Sweep/list value. Command column documents it; omit this flag so yaml expands cases. | 2026-10-22 (00_117): smoke local_dram and remote_dram 16777216 -> 268435456. 16 MiB fits in the host L3 (48 MiB on the 401-432 Xeon), so smoke published a 32-34 ns L3 hit as DRAM latency.\"}, \"stride\": {\"smoke\": \"64\", \"baseline\": \"64\", \"extended\": \"64\", \"notes\": \"\"}, \"warmup_iters\": {\"smoke\": \"10000\", \"baseline\": \"1000000\", \"extended\": \"1000000\", \"notes\": \"\"}, \"num_iterations\": {\"smoke\": \"200000\", \"baseline\": \"1330000000\", \"extended\": \"2760000000\", \"notes\": \"H100 2026-08-16 num_iterations=270000000 -> 203s (3:23). Clean run; earlier 50M was inflated by FIO contention. Extended 800e6 extrapolated ~10:00, not tested. Retimed 2026-08-17 toward 3-4 min baseline; extended scaled by the same factor. 2026-08-18 retune: baseline>=3min / extended>=10min or extended~15min; NVIDIA copied from AMD.\"}, \"num_threads\": {\"smoke\": \"1\", \"baseline\": \"4\", \"extended\": \"4\", \"notes\": \"\"}, \"thread_affinity\": {\"smoke\": \"0-3\", \"baseline\": \"0-3\", \"extended\": \"0-3\", \"notes\": \"\"}}"
+    "value": "{\"num_numa_nodes\": {\"smoke\": \"1\", \"baseline\": \"1\", \"extended\": \"1\"}, \"working_set_size\": {\"smoke\": \"l1=16384,l2=262144,l3=2097152,local_dram=268435456,remote_dram=268435456\", \"baseline\": \"l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456\", \"extended\": \"l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456\"}, \"stride\": {\"smoke\": \"64\", \"baseline\": \"64\", \"extended\": \"64\"}, \"warmup_iters\": {\"smoke\": \"10000\", \"baseline\": \"1000000\", \"extended\": \"1000000\"}, \"num_iterations\": {\"smoke\": \"200000\", \"baseline\": \"1330000000\", \"extended\": \"2760000000\"}, \"num_threads\": {\"smoke\": \"1\", \"baseline\": \"4\", \"extended\": \"4\"}, \"thread_affinity\": {\"smoke\": \"0-3\", \"baseline\": \"0-3\", \"extended\": \"0-3\"}}"
   },
   {
     "field_name": "Profile Command Authorship",

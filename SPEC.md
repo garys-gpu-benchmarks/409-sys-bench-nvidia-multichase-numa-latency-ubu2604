@@ -17,7 +17,7 @@
 ## Invocation
 
 ```bash
-Compile multichase.c with gcc -O2 -std=c11 via collect_multichase.py; always prefix numactl --cpunodebind=0 and --membind=0 or 1
+Compile src/multichase.c; run build/multichase under numactl via scripts/collect_multichase.py
 ```
 
 ## Raw Output Format
@@ -46,7 +46,7 @@ scripts/collect_workload.py dispatches collect_multichase.py, which compiles src
 ## Platform Portability
 
 - **AMD (primary):** ```bash
-Compile multichase.c with gcc -O2 -std=c11 via collect_multichase.py; always prefix numactl --cpunodebind=0 and --membind=0 or 1
+Compile src/multichase.c; run build/multichase under numactl via scripts/collect_multichase.py
 ```
 - **NVIDIA:** Native NVIDIA CUDA workload. Execute on the stated Ubuntu release with the host NVIDIA driver and CUDA userspace. ROCm porting notes do not apply.
 
