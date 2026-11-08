@@ -19,10 +19,10 @@ usage() {
 
 Usage: bash run_benchmark.sh [OPTIONS]
 
-Workload Name:          multichase Pointer-Chase.
-Main Goal:              Measure pointer-chase latency across yaml working-set tiers.
+Workload Name:          multichase Pointer-Chase
+Main Goal:              Measure pointer-chase latency across yaml working-set tiers
 Command Tools Executed: Compile src/multichase.c; run build/multichase under numactl via
-                        scripts/collect_multichase.py.
+                        scripts/collect_multichase.py
 
 Profiles (default: --smoke):
   --smoke                       Run smoke profile
