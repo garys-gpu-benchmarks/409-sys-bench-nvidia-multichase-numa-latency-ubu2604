@@ -40,6 +40,11 @@
     "value": "Compile src/multichase.c; run build/multichase under numactl via scripts/collect_multichase.py"
   },
   {
+    "field_name": "Execution Description With Parameters",
+    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
+    "value": "scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: concurrent chase threads. thread_affinity: CPU list passed to numactl --physcpubind. num_iterations: chase operations (smoke capped at 200000). warmup_iters is capped at 10000 on smoke. Each invocation is prefixed with numactl --cpunodebind=0 --membind=0. remote_dram runs with --cpunodebind=0 --membind=1 when numactl --hardware reports two or more NUMA nodes; on a single-node host it is reported as not measured"
+  },
+  {
     "field_name": "Metrics",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "#1: Pointer-chase latency for the L1-cache tier (latency_ns_l1); #2: Pointer-chase latency for the L2-cache tier (latency_ns_l2); #3: Pointer-chase latency for the L3-cache tier (latency_ns_l3); #4: Local DRAM latency, ns (latency_ns_local_dram); #5: Remote DRAM latency, ns, na on a host with fewer than two NUMA nodes (latency_ns_remote_dram)"
@@ -173,11 +178,6 @@
     "field_name": "Command Methodology",
     "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
     "value": "scripts/collect_workload.py dispatches collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml tier under numactl --cpunodebind=0 --membind=0, or --membind=1 for remote DRAM when two or more NUMA nodes exist, then parses latency_ns"
-  },
-  {
-    "field_name": "Execution Description With Parameters",
-    "source_file": "BenchmarkSpecDefinitions.xlsx::Workload_Definitions",
-    "value": "scripts/collect_workload.py dispatches scripts/collect_multichase.py, which compiles src/multichase.c with gcc -O2 -std=c11 and runs one pointer-chase per yaml working-set tier. working_set_size: comma-separated tier=bytes (smoke l1=16384,l2=262144,l3=2097152,local_dram=16777216,remote_dram=16777216; baseline/extended l1=32768,l2=262144,l3=8388608,local_dram=268435456,remote_dram=268435456). stride: chase stride. num_threads: concurrent chase threads. thread_affinity: CPU list passed to numactl --physcpubind. num_iterations: chase operations (smoke capped at 200000). warmup_iters is capped at 10000 on smoke. Each invocation is prefixed with numactl --cpunodebind=0 --membind=0. remote_dram runs with --cpunodebind=0 --membind=1 when numactl --hardware reports two or more NUMA nodes; on a single-node host it is reported as not measured"
   },
   {
     "field_name": "Execution Domain",
